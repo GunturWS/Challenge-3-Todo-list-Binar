@@ -1,130 +1,35 @@
-import { useState } from "react";
-import Deleteicon from "../components/Icon/Deleteicon";
-import Editicon from "../components/Icon/Editicon";
-import data from "../Data/data.json";
-import TodoButton from "../components/TodoButton";
-import TodoInput from "../components/TodoInput";
+import Deleteicon from "./Icon/Deleteicon";
+import Editicon from "./Icon/Editicon";
+import PropTypes from "prop-types";
+import TodoButton from "./TodoButton";
+// import TodoInput from "../pages/TodoInput";
 // import TodoInput from "../components/Todoinput";
 
-const TodoList = () => {
-  const [editingItem, setEditingItem] = useState(null);
-  const [editTask, setEditTask] = useState("");
-  const [todos, setTodos] = useState(data);
-  const [value, setValue] = useState("");
-
-  const filteredTodo = (todos, show) => {
-    return todos.filter((todo) => {
-      if (show === "done") {
-        return todo.complete === true;
-      } else if (show === "todo") {
-        return todo.complete === false;
-      }
-    });
-  };
-
-  const handleAllTodo = () => {
-    setTodos(data);
-  };
-
-  const handleDoneTodo = () => {
-    setTodos(filteredTodo(data, "done"));
-  };
-
-  const handleToDo = () => {
-    setTodos(filteredTodo(data, "todo"));
-  };
-
-  const handleDelete = (id) => {
-    const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus tugas ini?");
-
-    if (confirmDelete) {
-      const updatedTodos = todos.filter((item) => item.id !== id);
-      setTodos(updatedTodos);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    setValue(e.target.value);
-  };
-
-  const addTodo = (newTodo) => {
-    setTodos([
-      ...todos,
-      {
-        id: todos.length + 1,
-        task: newTodo,
-        complete: false,
-      },
-    ]);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    addTodo(value);
-  };
-
-  const toggleComplete = (itemId) => {
-    const itemIndex = todos.findIndex((item) => item.id === itemId);
-
-    if (itemIndex !== -1) {
-      const updatedTodos = [...todos];
-
-      updatedTodos[itemIndex].complete = !updatedTodos[itemIndex].complete;
-
-      setTodos(updatedTodos);
-    }
-  };
-
-  const editTodo = (index) => {
-    const newText = prompt("Edit todo:", todos[index - 1].task);
-    if (newText !== null) {
-      const updatedTodos = [...todos];
-      updatedTodos[index - 1].task = newText;
-      setTodos(updatedTodos);
-      console.log(`Data item diubah menjadi: "${newText}"`);
-    }
-  };
-
-  const handleSaveEdit = () => {
-    const taskIndex = todos.findIndex((item) => item.id === editingItem);
-
-    if (taskIndex !== -1) {
-      const updatedTodos = [...todos];
-
-      updatedTodos[taskIndex].task = editTask;
-
-      setEditingItem(null);
-      setEditTask("");
-
-      setTodos(updatedTodos);
-    }
-  };
-
-  const handleDeleteAllTasks = () => {
-    const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus semua tugas?");
-
-    if (confirmDelete) {
-      setTodos([]);
-    }
-  };
-
-  const handleDeleteDoneTasks = () => {
-    const confirmDelete = window.confirm(
-      "Apakah Anda yakin ingin menghapus tugas yang telah di tandai?"
-    );
-
-    if (confirmDelete) {
-      const incompleteTasks = todos.filter((item) => !item.complete);
-      setTodos(incompleteTasks);
-    }
-  };
-
+const TodoList = ({
+  // handleInputChange,
+  // value,
+  // handleSubmit,
+  
+  handleDoneTodo,
+  handleAllTodo,
+  handleToDo,
+  show,
+  editingItem,
+  editTask,
+  setEditTask,
+  toggleComplete,
+  handleSaveEdit,
+  editTodo,
+  handleDelete,
+  handleDeleteAllTasks,
+  handleDeleteDoneTasks,
+}) => {
   return (
     <div className="mt-4 py-3">
-      <TodoInput onChange={handleInputChange} value={value} onSubmit={handleSubmit} />
+      {/* <TodoInput onChange={handleInputChange} value={value} onSubmit={handleSubmit} /> */}
       <TodoButton doneTodo={handleDoneTodo} allTodo={handleAllTodo} toDo={handleToDo} />
       <ul className="">
-        {todos.map((item) => (
+        {show.map((item) => (
           <li key={item.id} className={`todo-item ${item.complete ? "completed" : ""}`}>
             <div>
               <div className="mt-2.5 flex w-full items-center justify-between bg-white p-4 rounded-lg border border-gray-200 shadow">
@@ -211,3 +116,23 @@ const TodoList = () => {
 };
 
 export default TodoList;
+
+TodoList.propTypes = {
+  // handleInputChange: PropTypes.func.isRequired,
+  // value: PropTypes.string.isRequired,
+  // handleSubmit: PropTypes.func.isRequired,
+  handleDoneTodo: PropTypes.func.isRequired,
+  handleAllTodo: PropTypes.func.isRequired,
+  handleToDo: PropTypes.func.isRequired,
+  show: PropTypes.array.isRequired,
+  editingItem: PropTypes.any.isRequired,
+  editTask: PropTypes.string.isRequired,
+  setEditTask: PropTypes.func.isRequired,
+  toggleComplete: PropTypes.func.isRequired,
+  handleSaveEdit: PropTypes.func.isRequired,
+  editTodo: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  handleDeleteAllTasks: PropTypes.func.isRequired,
+  handleDeleteDoneTasks: PropTypes.func.isRequired,
+
+};
