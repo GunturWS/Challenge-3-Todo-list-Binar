@@ -19,7 +19,9 @@ const TodoInput = ({ task, setTask }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    const confirmDelete = window.confirm("Kamu berhasil menginput data baru :)");
+
+    if (confirmDelete) e.preventDefault();
     addTodo(value);
     setValue("");
   };

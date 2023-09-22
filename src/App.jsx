@@ -2,10 +2,11 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Searchtodo from "./pages/Searchtodo";
 import TodoInput from "./pages/TodoInput";
-// import data from "./Data/data.json";
+import data from "./Data/data.json";
 import { useState, useEffect } from "react";
+import Notfound from "./components/Notfound";
 
-// localStorage.setItem("userData", JSON.stringify(data));
+localStorage.setItem("Data", JSON.stringify(data));
 const getLocalStorage = () => {
   let Data = localStorage.getItem("Data");
   if (Data) {
@@ -26,6 +27,7 @@ function App() {
       <Routes>
         <Route path="/" index element={<Searchtodo task={task} />} />
         <Route path="/add-todo" index element={<TodoInput task={task} setTask={setTask} />} />
+        <Route path="*" element={<Notfound/>} />
       </Routes>
     </Router>
   );
